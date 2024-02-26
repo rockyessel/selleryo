@@ -21,6 +21,7 @@ export const createUser = async (
     user: any
 ): Promise<ResObj<{ id: string } | null>> => {
     try {
+        console.log('user: ',user)
         // Check if the email already exists
         const isEmailUnique = await fetchQuery(docMethod.getDocByField, {
             docType: 'users',
@@ -28,32 +29,39 @@ export const createUser = async (
             value: user.email,
         });
 
+        console.log('isEmailUnique: ',isEmailUnique)
+
         // If email is not unique, return an error response
-        if (!isEmailUnique) {
+        if (isEmailUnique) {
             return { ...errorRes, msg: 'Account already exists.' };
         }
 
         // Extract password from user object
         const { password } = user;
 
+        
         // Determine authType based on password
         if (password === '') {
             // If password is empty, set authentication type to 'provider'
             user.authType = 'provider';
         } else if (password) {
             // If password is provided, set authentication type to 'credentials' and hash the password
-            user.authType = 'credentials';
+            // user.authType = 'credentials';
             const hashedPassword = await generateHash(password);
             user.password = hashedPassword;
+            console.log('password: ',password)
         }
 
         // Generate a unique username using IdGen function
         user.username = IdGen('USERNAME');
 
+
+        console.log('modified_user: ', user)
+
         // Insert the user into the database
-        const insertedUser = await fetchMutation(usersMethod.createUser, {
-            ...user,
-        });
+        const insertedUser = await fetchMutation(usersMethod.createUser, { ...user });
+
+        console.log('insertedUser: ', insertedUser)
 
         if (insertedUser) {
             return {

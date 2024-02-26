@@ -6,14 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn, isObjectEmptyWithState } from '@/lib/utils/helpers';
 import { ChangeEvent, HTMLAttributes, SyntheticEvent, useState } from 'react';
-// import {
-//   createUserByCredential,
-//   validateUserInfo,
-// } from '@/lib/server/services';
 import { toast } from 'sonner';
 import { createUser } from '@/lib/server';
-// import { createUser } from '@/lib/db/queries/users';
-// import { UserProps } from '@/interface';
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {
   auth: string;
@@ -46,14 +40,15 @@ export function UserAuthForm({ className, auth, ...props }: UserAuthFormProps) {
 
   const handleSubmission = async (event: SyntheticEvent) => {
     try {
+      event.preventDefault();
       setIsLoading(true);
       toast.loading('Authenticating...');
-      event.preventDefault();
       let success = false;
       if (auth === 'sign-up') {
         isObjectEmptyWithState(form, setIsLoading);
         const result = await createUser(form);
         if (result.success) {
+          console.log('form" ', form)
           success = true;
           toast.success('Authenticated successfully.');
         }

@@ -84,14 +84,14 @@ export const UserSchema = {
   name: v.string(),
   username: v.string(),
   email: v.string(),
-  password: v.string(),
-  image: v.string(),
-  bio: v.string(),
-  location: v.string(),
+  password: v.optional(v.string()),
+  image: v.optional(v.string()),
+  bio: v.optional(v.string()),
+  location: v.optional(v.string()),
   authType: v.string(),
-  phoneNumber: v.string(),
-  isVerified: v.boolean(),
-  shopRole: v.array(v.object(shopRole)),
+  phoneNumber: v.optional(v.string()),
+  isVerified: v.optional(v.boolean()),
+  shopRole: v.optional(v.array(v.object(shopRole))),
 };
 
 export const FileSchema = {

@@ -37,7 +37,7 @@ export default function Home() {
       <div className='self-center w-full max-w-[1312px] mt-6 px-5 pb-8 space-y-8 max-md:max-w-full'>
         <div className={cardStyles.list}>
           <h3 className={textStyles.cardTitle}>Recent orders</h3>
-          <OrderList />
+          {/* <OrderList /> */}
         </div>
       </div>
     </div>

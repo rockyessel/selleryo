@@ -6,6 +6,7 @@ import { createUser, validateUser } from '../server';
 import { fetchQuery } from 'convex/nextjs';
 import { docMethod } from '../convex';
 
+
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
@@ -35,7 +36,8 @@ export const authOptions: AuthOptions = {
         email: { label: 'email', type: 'text' },
         password: { label: 'password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
+        console.log('credentials: ',credentials)
         const email = credentials?.email;
         const password = credentials?.password;
         if (!email || !password) return null;

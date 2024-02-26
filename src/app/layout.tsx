@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import ConvexClientProvider from '@/lib/providers/convex';
 import { ChildrenProps } from '@/types';
 import { NextAuthProvider } from '@/lib/providers/next-auth';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +19,10 @@ export default function RootLayout({ children }: ChildrenProps) {
     <html lang='en'>
       <body className={inter.className}>
         <NextAuthProvider>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ConvexClientProvider>
+            {children}
+          <Toaster richColors position="top-center" />
+          </ConvexClientProvider>
         </NextAuthProvider>
       </body>
     </html>
