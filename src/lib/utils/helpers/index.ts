@@ -27,7 +27,6 @@ export const isObjectEmptyWithState = (
   }
 };
 
-
 /**
  * Creates a slug from the input string for SEO-friendly URLs.
  * @param input - The input string to create a slug from.
@@ -41,8 +40,6 @@ export const createSlug = (input: string): string => {
     .trim(); // Remove leading and trailing spaces
   return slug;
 };
-
-
 
 export const truncate = (str: string, num: number) => {
   if (!str) return '';
@@ -139,4 +136,15 @@ export const generateRandomImages = (count: number) => {
   }
 
   return images;
+};
+
+export const getFileExtensionNType = (file: File) => {
+  const fileExtension = file.name.split('.');
+  if (fileExtension.length < 2) {
+    toast.error("File name doesn't contain an extension");
+    return '';
+  }
+  const type = file.type.split('/').shift()!;
+  const extension = fileExtension[fileExtension.length - 1].toLowerCase();
+  return `${type} ${extension}`;
 };

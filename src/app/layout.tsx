@@ -6,6 +6,7 @@ import ConvexClientProvider from '@/lib/providers/convex';
 import { ChildrenProps } from '@/types';
 import { NextAuthProvider } from '@/lib/providers/next-auth';
 import { Toaster } from 'sonner';
+import { ConvexStorageContextProvider } from '@/context/convex-storage';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,8 +21,10 @@ export default function RootLayout({ children }: ChildrenProps) {
       <body className={inter.className}>
         <NextAuthProvider>
           <ConvexClientProvider>
-            {children}
-          <Toaster richColors position="top-center" />
+            <ConvexStorageContextProvider>
+              {children}
+              <Toaster richColors position='top-center' />
+            </ConvexStorageContextProvider>
           </ConvexClientProvider>
         </NextAuthProvider>
       </body>

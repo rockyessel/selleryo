@@ -1,3 +1,4 @@
+import { fetchMutation } from 'convex/nextjs';
 import { api } from '../../../convex/_generated/api';
 
 export const taskMethod = api.func.tasks;
@@ -22,4 +23,9 @@ export const tagsMethod = api.core.shop.tags;
 
 export const shopsMethod = api.core.shop.index;
 
-
+export const fileUpload = async (file: File) => {
+  const uploadURL = await fetchMutation(storageMethod.file.generateUploadUrl);
+  const result = await fetch(uploadURL, { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
+  const { storageId } = await result.json();
+  return storageId;
+};

@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from 'convex/react';
 import { Id } from '../../../convex/_generated/dataModel';
 import { FormEvent, useRef, useState } from 'react';
-import { messagesMethod, taskMethod } from '@/lib/convex';
+import { fileUpload, messagesMethod, taskMethod } from '@/lib/convex';
 
 export default function Home() {
   const tasks = useQuery(taskMethod.get);
@@ -11,7 +11,6 @@ export default function Home() {
   const id = 'j57ffyqzeehb2y5d1e70hp2p6h6kwj55' as Id<'tasks'>;
   const stId = 'kg26vs521876ceyr192b245zc56kzqtg' as Id<'_storage'>;
   const addTask = useMutation(taskMethod.createTask);
-  const generateUploadUrl = useMutation(messagesMethod.generateUploadUrl);
   const sendImage = useMutation(messagesMethod.sendImage);
   const imageInput = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -22,22 +21,14 @@ export default function Home() {
   async function handleSendImage(event: FormEvent) {
     event.preventDefault();
 
-    const postUrl = await generateUploadUrl();
-
-    const result = await fetch(postUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': selectedImage!.type },
-      body: selectedImage,
-    });
-    const { storageId } = await result.json();
+    const storageId = await fileUpload(selectedImage!);
 
     await sendImage({ storageId, author: name });
 
-    const getImageUrl = new URL(
-      `${process.env.NEXT_PUBLIC_CONVEX_URL}/getImage`
+    const getImageUrl = new URL(`${process.env.NEXT_PUBLIC_CONVEX_URL}/file/get`
     );
-    getImageUrl.searchParams.set('storageId', storageId);
     console.log('getImageUrl: ', getImageUrl);
+    getImageUrl.searchParams.set('storageId', storageId);
 
     setSelectedImage(null);
     imageInput.current!.value = '';

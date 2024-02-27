@@ -5,7 +5,7 @@ import { api } from '../_generated/api';
 const http = httpRouter();
 
 http.route({
-  path: '/sendImage',
+  path: '/file/upload',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
     // Step 1: Store the file
@@ -30,7 +30,7 @@ http.route({
 });
 
 http.route({
-  path: '/getImage',
+  path: '/file/get',
   method: 'GET',
   handler: httpAction(async (ctx, request) => {
     const { searchParams } = new URL(request.url);
@@ -48,7 +48,7 @@ http.route({
 
 // Pre-flight request for /sendImage
 http.route({
-  path: '/sendImage',
+  path: '/file/upload',
   method: 'OPTIONS',
   handler: httpAction(async (_, request) => {
     // Make sure the necessary headers are present

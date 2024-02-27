@@ -132,7 +132,6 @@ export interface User {
 }
 
 export interface File {
-  shopId: string;
   folderId?: string;
   storageId: string;
   uploadedBy: string;

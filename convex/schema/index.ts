@@ -95,9 +95,8 @@ export const UserSchema = {
 };
 
 export const FileSchema = {
-  shopId: v.id('shops'),
   folderId: v.optional(v.id('folders')),
-  storageId: v.id('_storage'),
+  storageId:v.id('_storage'),
   uploadedBy: v.id('users'),
 };
 
