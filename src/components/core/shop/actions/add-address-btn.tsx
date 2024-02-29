@@ -30,7 +30,7 @@ const AddAddressBtn = ({ actionName }: Props) => {
   const [address, setAddress] = useState(init);
   const { data: session } = useSession();
 
-  console.log('address: ', address);
+  // console.log('address: ', address);
 
   const handleUpdate = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

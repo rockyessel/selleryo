@@ -11,7 +11,7 @@ interface Props {
 }
 
 const InviterCard = async ({ inviterId }: Props) => {
-  console.log('inviterId: ', inviterId);
+  // console.log('inviterId: ', inviterId);
   // const [loader, setLoader] = useState(true);
   // const [user, setUser] = useState<UserProps>();
   // const truncatedEmail = truncate(user?.email!, 5);

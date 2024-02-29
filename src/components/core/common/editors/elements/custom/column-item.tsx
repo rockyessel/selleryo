@@ -4,7 +4,7 @@ const ColumnItem = ({ renderProps }: ElementProps) => {
   const { attributes, children, element } = renderProps;
   const {} = element as ColumnItemType;
 
-  console.log('element: ', element);
+  // console.log('element: ', element);
   return (
     <div
       {...attributes}

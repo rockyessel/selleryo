@@ -13,7 +13,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 const CategoryDropdown = (props: Props) => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
 
-  console.log('categories: ', categories);
+  // console.log('categories: ', categories);
 
   useEffect(() => {
     getAllCategories().then((categories) => setCategories(categories));

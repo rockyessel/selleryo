@@ -36,8 +36,8 @@ const ImageElement = ({ editor, renderProps }: ElementProps) => {
         />
         <Button
           onClick={() => {
-            console.log('path: ', path);
-            console.log('Editor In Button: ', editor);
+            // console.log('path: ', path);
+            // console.log('Editor In Button: ', editor);
             Transforms.removeNodes(editor, { at: path });
           }}
           className={css`

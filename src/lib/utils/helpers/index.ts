@@ -21,7 +21,7 @@ export const isObjectEmptyWithState = (
     if (obj[field] === '') {
       toast.error(`${field} cannot be empty.`);
       setState(false);
-      console.log('error: ', field);
+      // console.log('error: ', field);
       return;
     }
   }
@@ -138,13 +138,73 @@ export const generateRandomImages = (count: number) => {
   return images;
 };
 
-export const getFileExtensionNType = (file: File) => {
-  const fileExtension = file.name.split('.');
-  if (fileExtension.length < 2) {
-    toast.error("File name doesn't contain an extension");
-    return '';
+export const getFileExtensionNType = (file?: File) => {
+  if (file) {
+    const fileExtension = file.name?.split('.');
+    if (fileExtension.length < 2) {
+      toast.error("File name doesn't contain an extension");
+      return '';
+    }
+    const type = file.type.split('/').shift()!;
+    const extension = fileExtension[fileExtension.length - 1].toLowerCase();
+    return `${type} ${extension}`;
   }
-  const type = file.type.split('/').shift()!;
-  const extension = fileExtension[fileExtension.length - 1].toLowerCase();
-  return `${type} ${extension}`;
+
+  return '';
+};
+
+
+
+
+
+
+/**
+ * Get initials from a given name.
+ * For single-word names, extracts initials from consecutive uppercase letters.
+ * For multi-word names, extracts initials from the first letter of each word.
+ *
+ * @param {string} name - The input name.
+ * @param {number} [numberOfInitials=2] - The number of initials to extract.
+ * @returns {string} - The extracted initials.
+ *
+ * @example
+ * // Single-word name example
+ * const singleWordName = 'EuroMarket';
+ * const initialsSingleWord = getInitials(singleWordName);
+ * console.log(initialsSingleWord); // Output: 'EM'
+ *
+ * @example
+ * // Multi-word name example
+ * const multiWordName = 'Euro Market';
+ * const initialsMultiWord = getInitials(multiWordName, 3);
+ * console.log(initialsMultiWord); // Output: 'EM' (extracts up to 3 initials)
+ */
+export const getInitials = (name: string, numberOfInitials: number = 2): string => {
+  const initials: string[] = [];
+  let count = 0;
+
+  // Check if the name has spaces to determine if it's a multi-word name
+  const isMultiWord = name.includes(' ');
+
+  if (isMultiWord) {
+    const words = name.split(' ');
+
+    for (let i = 0; i < words.length && count < numberOfInitials; i++) {
+      const word = words[i];
+      if (word.length > 0) {
+        initials.push(word[0].toUpperCase());
+        count++;
+      }
+    }
+  } else {
+    // For single-word names, extract initials from consecutive uppercase letters
+    for (let i = 0; i < name.length && count < numberOfInitials; i++) {
+      if (name[i] === name[i].toUpperCase()) {
+        initials.push(name[i]);
+        count++;
+      }
+    }
+  }
+
+  return initials.join('');
 };

@@ -14,7 +14,7 @@ const PaystackBtn = ({ amount, email }: Props) => {
 
   const handlePaystackSuccessAction = (reference: string) => {
     // handle payment success
-    console.log('Reference: ', reference);
+    // console.log('Reference: ', reference);
   };
 
   const componentProps = {

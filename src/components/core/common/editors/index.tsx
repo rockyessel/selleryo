@@ -15,27 +15,15 @@ import { ElementSettingsProvider } from '@/context/element-settings';
 import FloatingToolbar from './toolbar/floating-toolbar';
 
 const TextEditor = () => {
-  const titleRef = useRef<HTMLInputElement>(null);
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const handleEditorKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    // Handle arrow up and arrow left and focus to title
-    if (
-      (event.key === 'ArrowUp' || event.key === 'ArrowLeft') &&
-      editor.selection?.anchor.path[0] === 0 &&
-      editor.selection?.anchor.offset === 0
-    ) {
-      event.preventDefault();
-      titleRef.current?.focus();
-      return;
-    }
-
     // Handle Ctrl keys
     if (event.ctrlKey) {
       // Match key combination for elements
       const match = ELEMENTS_CMD.find(
         (el) => el.key[0] === 'ctrl' && el.key[1] === event.key
       );
-      console.log('match: ', match);
+      // console.log('match: ', match);
       if (match) {
         event.preventDefault();
         toggleBlock(editor, match.type as any);
@@ -46,7 +34,7 @@ const TextEditor = () => {
       const match_m = MARKUPS_CMD.find(
         (markup) => markup.key[0] === 'ctrl' && markup.key[1] === event.key
       );
-      console.log('match_m: ', match_m);
+      // console.log('match_m: ', match_m);
       if (match_m) {
         event.preventDefault();
         toggleMark(editor, match_m.type as any);
@@ -58,18 +46,6 @@ const TextEditor = () => {
     if (event.shiftKey && event.key === 'Enter') {
       event.preventDefault();
       Transforms.insertText(editor, '\n');
-    }
-  };
-
-  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (
-      event.key === 'Enter' ||
-      event.key === 'ArrowDown' ||
-      (event.key === 'ArrowRight' &&
-        titleRef.current?.selectionEnd === title.length)
-    ) {
-      event.preventDefault();
-      ReactEditor.focus(editor);
     }
   };
 

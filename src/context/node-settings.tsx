@@ -72,11 +72,11 @@ export const NodeSettingsProvider = ({
     getInitialState(editor)
   );
   const [isElementOptionsOpen, setNodeSettingsOpen] = useState<boolean>(false);
-  // console.log('hoveredElement: ', hoveredElement);
+  // // console.log('hoveredElement: ', hoveredElement);
   const events = useMemo<NodeSettingsContextEventHandlers>(
     () => ({
       triggerPlusButton(elementNode) {
-        console.log('elementNode: ', elementNode);
+        // console.log('elementNode: ', elementNode);
         Editor.withoutNormalizing(editor, () => {
           if (!editor.selection || !elementNode) return;
 

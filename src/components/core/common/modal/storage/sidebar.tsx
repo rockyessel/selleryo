@@ -1,16 +1,17 @@
-import { Button } from '@/components/ui/button';
+'use client';
 
-import { FolderUp, FileText, Folder, Link, MonitorUp } from 'lucide-react';
-import { StorageHeaderMenu } from './menu';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { StorageModalSidebarItem } from '.';
+import StorageHeaderMenu from './header-menu';
+import { Button } from '@/components/ui/button';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { FolderUp, FileText, Folder, Link, MonitorUp } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
   setSelectItem: Dispatch<SetStateAction<StorageModalSidebarItem>>;
 }
 
-export function Sidebar({ children, setSelectItem }: Props) {
+const Sidebar = ({ children, setSelectItem }: Props) => {
   return (
     <div className='w-full h-full flex items-start'>
       <div className='pb-12 w-[250px] h-full sticky top-16 border-r'>
@@ -21,7 +22,7 @@ export function Sidebar({ children, setSelectItem }: Props) {
             </h2>
             <div className='space-y-1'>
               <Button
-                onClick={() => setSelectItem('recent-upload')}
+                onClick={() => setSelectItem('recent-uploads')}
                 variant='secondary'
                 className='w-full justify-start'
               >
@@ -77,4 +78,6 @@ export function Sidebar({ children, setSelectItem }: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

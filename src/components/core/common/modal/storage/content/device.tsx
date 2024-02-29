@@ -1,3 +1,5 @@
+'use client';
+
 import { ImagePlus } from 'lucide-react';
 import { cn } from '@/lib/utils/helpers';
 import FileCard from '../file/extension';
@@ -35,7 +37,7 @@ const DeviceUpload = () => {
       {files.length > 0 && (
         <div className='flex items-center flex-wrap gap-2'>
           {files.map((file, index) => (
-            <FileCard file={file} key={index} />
+            <FileCard file={file} key={index} type='upload' />
           ))}
           {/* <button onClick={handleSubmision}>Upload</button> */}
         </div>

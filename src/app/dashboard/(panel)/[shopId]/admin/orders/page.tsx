@@ -1,6 +1,3 @@
-
-
-
 import BreadCrumbsMenu from '@/components/core/panel/common/bread-crumbs';
 import Button from '@/components/core/panel/common/button';
 import OrderList from '@/components/core/panel/orders/order-list';
@@ -20,7 +17,7 @@ const OrderLists = async ({ params }: Props) => {
     shopId: params.shopId,
   });
 
-  console.log('params: ', params);
+  // console.log('params: ', params);
 
   return (
     <div className='h-full w-full flex flex-col space-y-4 pt-2'>

@@ -13,7 +13,8 @@ const nextConfig = {
             { hostname: "cdn.sanity.io" },
             { hostname: "cdn.builder.io" },
             { hostname: "upload.wikimedia.org" },
-            { hostname: "images.unsplash.com" }
+            { hostname: "images.unsplash.com" },
+            { hostname: 'perfect-buffalo-199.convex.cloud' }
         ]
     },
 }

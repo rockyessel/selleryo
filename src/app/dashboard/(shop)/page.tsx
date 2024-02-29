@@ -1,21 +1,18 @@
-
 import UserAddress from '@/components/core/shop/profile/user-address';
 import UserContact from '@/components/core/shop/profile/user-contact';
 import UserProfile from '@/components/core/shop/profile/user-profile';
 import axios from 'axios';
-
-
 
 const DashboardPage = async () => {
   const { data: countries } = await axios.get(
     'https://restcountries.com/v2/all'
   );
 
-  const session = {}
+  const session = {};
 
-  const addresses:any[] =[]
+  const addresses: any[] = [];
 
-  console.log('addresses: ', addresses);
+  // console.log('addresses: ', addresses);
 
   return (
     <div className='flex flex-col mt-1.5'>

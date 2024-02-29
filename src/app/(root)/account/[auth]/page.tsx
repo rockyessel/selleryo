@@ -20,7 +20,7 @@ const AuthenticationPage = async ({ params: { auth } }: Props) => {
 
   const session = await getServerUser();
 
-  console.log('Session: ', session);
+  // console.log('Session: ', session);
 
   if (session !== null) isUserSignedIn = true;
 

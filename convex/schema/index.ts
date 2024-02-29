@@ -13,8 +13,12 @@ export const TagSchema = {
 export const ProductReviewSchema = {
   productId: v.id('products'),
   userId: v.id('users'),
+  shopId: v.id('shops'),
   rating: v.number(),
+  wouldRecommend: v.boolean(),
+  title: v.optional(v.string()),
   comment: v.optional(v.string()),
+  photos: v.optional(v.array(v.string())),
 };
 
 export const WishListSchema = {
@@ -22,17 +26,27 @@ export const WishListSchema = {
   userId: v.id('users'),
 };
 
+export const marketplace = {
+  tags: v.string(),
+  categories: v.string(),
+};
+
 export const ProductSchema = {
   name: v.string(),
   slug: v.string(),
   description: v.string(),
   shortDescription: v.string(),
-  images: v.array(v.string()),
+  // images: v.array(v.string()),
+  images: v.string(),
+  isProductOnMarket: v.boolean(),
+  marketplace: v.optional(v.object(marketplace)),
   currentPrice: v.string(),
   previousPrice: v.string(),
   visibility: v.string(),
-  categories: v.array(v.object(CategorySchema)),
-  tags: v.array(v.object(TagSchema)),
+  // categories: v.array(v.object(CategorySchema)),
+  categories: v.string(),
+  // tags: v.array(v.object(TagSchema)),
+  tags: v.string(),
   stockQuantity: v.number(),
   sku_barCode: v.string(),
   addedById: v.id('users'),
@@ -45,6 +59,7 @@ export const OrderSchema = {
   tax: v.string(),
   discount: v.string(),
   customer: v.id('users'),
+  shopId: v.id('shops'),
   subTotal: v.string(),
   orderNumber: v.string(),
   orders: v.array(v.object(ProductSchema)),
@@ -59,25 +74,32 @@ export const OrderSchema = {
   date: v.string(),
   orderStatus: v.string(),
   paymentStatus: v.string(),
-  shopId: v.id('shops'),
 };
 
 export const ShopSchema = {
-  tags: v.array(v.string()),
-  image: v.string(),
-  name: v.string(),
-  categories: v.string(),
-  subdomain: v.string(),
-  customDomain: v.string(),
+  shopAdmin: v.id('users'),
   createdBy: v.id('users'),
-  favicon: v.string(),
-  title: v.string(),
-  description: v.string(),
+  name: v.string(),
+  subdomain: v.string(),
+  tags: v.optional(v.array(v.string())),
+  image: v.optional(v.string()),
+  categories: v.optional(v.string()),
+  customDomain: v.optional(v.string()),
+  favicon: v.optional(v.string()),
+  title: v.optional(v.string()),
+  description: v.optional(v.string()),
+  currency: v.optional(v.string()),
+  env: v.object({
+    stripe_key: v.optional(v.string()),
+    stripe_secrest: v.optional(v.string()),
+    permission_key: v.optional(v.string()),
+  }),
 };
 
-export const shopRole = {
+export const ShopRolesSchema = {
   role: v.string(),
   shopId: v.id('shops'),
+  userId: v.id('users'),
 };
 
 export const UserSchema = {
@@ -91,12 +113,12 @@ export const UserSchema = {
   authType: v.string(),
   phoneNumber: v.optional(v.string()),
   isVerified: v.optional(v.boolean()),
-  shopRole: v.optional(v.array(v.object(shopRole))),
+  // shopRole: v.optional(v.array(v.object(ShopRolesSchema))),
 };
 
 export const FileSchema = {
   folderId: v.optional(v.id('folders')),
-  storageId:v.id('_storage'),
+  storageId: v.id('_storage'),
   uploadedBy: v.id('users'),
 };
 

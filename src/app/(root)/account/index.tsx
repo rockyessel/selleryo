@@ -48,7 +48,7 @@ export function UserAuthForm({ className, auth, ...props }: UserAuthFormProps) {
         isObjectEmptyWithState(form, setIsLoading);
         const result = await createUser(form);
         if (result.success) {
-          console.log('form" ', form)
+          // console.log('form" ', form)
           success = true;
           toast.success('Authenticated successfully.');
         }

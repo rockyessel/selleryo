@@ -28,7 +28,7 @@ export const withEnterHandling = (editor: SlateEditor) => {
           parentPath.length > 1 &&
           parentPath[parentPath.length - 1] > 0
         ) {
-          console.log('paragraph: ', paragraph);
+          // console.log('paragraph: ', paragraph);
           // Insert a new list item
           Transforms.splitNodes(editor, { always: true });
           Transforms.setNodes<EditorElementProps>(editor, paragraph);

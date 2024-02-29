@@ -1,9 +1,5 @@
-'use client'
+'use client';
 
-
-// TypeScript users only add this t'code
-
-import { Product } from '@/types';
 import { proxy } from 'valtio';
 import {
   ArrowDownIcon,
@@ -13,19 +9,14 @@ import {
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from '@radix-ui/react-icons';
-
-
 import { Badge } from '@/components/ui/badge';
 import moment from 'moment';
-
 import { Checkbox } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
-
-import { ResObj } from '@/types';
+import { CartContextProps, ProductProps, ResObj } from '@/types';
 import { TableColumnHeader } from '@/components/core/panel/table/column-header';
 import { TableRowActions } from '@/components/core/panel/table/row-actions';
 
-// Sample data for ProductSchema
 export const sampleProductData = {
   name: 'Sample Product',
   slug: 'sample-product',
@@ -38,19 +29,18 @@ export const sampleProductData = {
   categories: ['Electronics', 'Gadgets'],
   stockQuantity: 100,
   sku_barCode: 'ABC123',
-  addedById: 'user123', // Replace with a valid user ID
+  addedById: 'user123',
   date: '2024-02-22',
-  shopId: 'shop123', // Replace with a valid shop ID
+  shopId: 'shop123',
 };
 
-// Sample data for OrderSchema
 export const sampleOrderData = {
   tax: '5.00',
   discount: '10.00',
-  customer: 'user456', // Replace with a valid user ID
+  customer: 'user456',
   subTotal: '100.00',
   orderNumber: 'ORD123456',
-  orders: [sampleProductData, sampleProductData], // Array of sample product data
+  orders: [sampleProductData, sampleProductData],
   shippingCharge: '8.00',
   billingAddressId: 'address123',
   shippingAddressId: 'address456',
@@ -62,7 +52,7 @@ export const sampleOrderData = {
   date: '2024-02-22',
   orderStatus: 'Pending',
   paymentStatus: 'Paid',
-  shopId: 'shop123', // Replace with a valid shop ID
+  shopId: 'shop123',
 };
 
 export const errorRes: ResObj<null> = {
@@ -71,17 +61,17 @@ export const errorRes: ResObj<null> = {
   data: null,
 };
 
-export const cartContextInitValues = {
-  getItemQuantity: (_id: number): number => 0,
-  increaseCartQuantity: (_product: any): void => {},
-  decreaseCartQuantity: (_product: any): void => {},
-  removeFromCart: (_id: number): void => {},
+export const cartContextInitValues: CartContextProps = {
+  getItemQuantity: (_id): number => 0,
+  increaseCartQuantity: (_product): void => {},
+  decreaseCartQuantity: (_product): void => {},
+  removeFromCart: (_id): void => {},
   getTotalPrice: (): number => 0,
-  getSelectOrderId: (_orderId: string): void => {},
+  getSelectOrderId: (_orderId): void => {},
   orderId: '',
   cartQuantity: 0,
   cartItems: [],
-  handleSelection: (_address: any): void => {},
+  handleSelection: (_address): void => {},
   selectedBillingAddress: {},
   selectedShippingAddress: {},
   setSchedule: () => {},
@@ -89,8 +79,6 @@ export const cartContextInitValues = {
   paymentMethod: '',
   setPaymentMethod: () => {},
 };
-
-
 
 export const labels = [
   {
@@ -127,24 +115,19 @@ export const statuses = [
 
 export const roles = [
   {
-    label: 'collaborator',
-    value: 'collaborator',
-    icon: ArrowDownIcon,
-  },
-  {
-    label: 'editor',
-    value: 'editor',
+    label: 'Support',
+    value: 'upport',
     icon: ArrowRightIcon,
   },
   {
-    label: 'admin',
+    label: 'Admin',
     value: 'admin',
     icon: ArrowUpIcon,
   },
 ];
 
 export const col = (shopId: string) => {
-  const columns: ColumnDef<Product>[] = [
+  const columns: ColumnDef<ProductProps>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -175,8 +158,7 @@ export const col = (shopId: string) => {
       header: ({ column }) => (
         <TableColumnHeader column={column} title='Inviters' />
       ),
-      cell: ({ row }) =>
-        row && <>Hello</>,
+      cell: ({ row }) => row && <>Hello</>,
       enableSorting: false,
       enableHiding: false,
     },
@@ -261,7 +243,7 @@ export const col = (shopId: string) => {
           (role) => role.value === row.getValue('givenRole')
         );
 
-        console.log('role: ', role);
+        // console.log('role: ', role);
 
         if (!role) {
           return null;
@@ -294,3 +276,149 @@ export const INVITATION_STATUS = {
   ACCEPTED: 'accepted',
   REJECTED: 'rejected',
 };
+
+export const marketStantardCateogries = [
+  {
+    category: 'Electronics',
+    subcategories: [
+      'Smartphones & Accessories',
+      'Laptops & Computers',
+      'Audio & Headphones',
+      'Cameras & Photography',
+      'Wearable Technology',
+    ],
+  },
+  {
+    category: 'Fashion',
+    subcategories: [
+      "Men's Clothing",
+      "Women's Clothing",
+      'Shoes & Footwear',
+      'Accessories (Bags, Hats, Sunglasses)',
+      'Jewelry & Watches',
+    ],
+  },
+  {
+    category: 'Home & Furniture',
+    subcategories: [
+      'Furniture',
+      'Bedding & Linens',
+      'Home Decor',
+      'Kitchen & Dining',
+      'Appliances',
+    ],
+  },
+  {
+    category: 'Beauty & Personal Care',
+    subcategories: [
+      'Skincare',
+      'Haircare',
+      'Makeup & Cosmetics',
+      'Fragrances',
+      'Personal Hygiene',
+    ],
+  },
+  {
+    category: 'Sports & Outdoors',
+    subcategories: [
+      'Exercise & Fitness',
+      'Outdoor Recreation',
+      'Sports Equipment',
+      'Activewear',
+      'Camping & Hiking',
+    ],
+  },
+  {
+    category: 'Toys & Games',
+    subcategories: [
+      'Action Figures & Toys',
+      'Board Games & Puzzles',
+      'Educational Toys',
+      'Outdoor Play',
+      'Video Games & Consoles',
+    ],
+  },
+  {
+    category: 'Books & Stationery',
+    subcategories: [
+      'Fiction & Literature',
+      'Non-fiction',
+      "Children's Books",
+      'Office Supplies',
+      'Writing Instruments',
+    ],
+  },
+  {
+    category: 'Health & Wellness',
+    subcategories: [
+      'Vitamins & Supplements',
+      'Health Monitors',
+      'Wellness & Relaxation',
+      'Medical Supplies',
+    ],
+  },
+  {
+    category: 'Automotive',
+    subcategories: [
+      'Car Accessories',
+      'Tools & Equipment',
+      'Tires & Wheels',
+      'Automotive Parts',
+    ],
+  },
+  {
+    category: 'Jewelry',
+    subcategories: [
+      'Necklaces & Pendants',
+      'Earrings',
+      'Bracelets & Bangles',
+      'Rings',
+      'Jewelry Sets',
+    ],
+  },
+  {
+    category: 'Pets',
+    subcategories: [
+      'Pet Food & Treats',
+      'Pet Care & Grooming',
+      'Pet Toys',
+      'Pet Beds & Furniture',
+    ],
+  },
+  {
+    category: 'Baby & Kids',
+    subcategories: [
+      'Baby Clothing',
+      'Diapers & Wipes',
+      'Baby Gear',
+      'Toys & Games for Kids',
+    ],
+  },
+  {
+    category: 'Grocery & Gourmet',
+    subcategories: [
+      'Pantry Staples',
+      'Snacks & Sweets',
+      'Beverages',
+      'Organic & Natural Foods',
+    ],
+  },
+  {
+    category: 'Art & Crafts',
+    subcategories: [
+      'Painting & Drawing Supplies',
+      'Craft Kits',
+      'Sculpting & Modeling',
+      'Printmaking',
+    ],
+  },
+  {
+    category: 'Electrical Appliances',
+    subcategories: [
+      'Kitchen Appliances',
+      'Home Appliances',
+      'Personal Care Appliances',
+      'Smart Home Devices',
+    ],
+  },
+];

@@ -1,10 +1,11 @@
+'use client';
+
 import { useCxStorage } from '@/context/convex-storage';
 import { toast } from 'sonner';
 
-export function StorageHeaderMenu() {
-  const { selectedFiles, handleRemoveSelectedFiles, files } = useCxStorage();
-  console.log('files: ', files);
-  console.log('selectedFiles: ', selectedFiles);
+const StorageHeaderMenu = () => {
+  const { selectedFiles, handleRemoveSelectedFiles, handleSubmision } =
+    useCxStorage();
 
   const handleRemoveFiles = () => {
     if (selectedFiles.length === 0) {
@@ -22,8 +23,10 @@ export function StorageHeaderMenu() {
       </ul>
 
       <ul>
-        <li>Upload</li>
+        <li onClick={handleSubmision}>Upload</li>
       </ul>
     </div>
   );
-}
+};
+
+export default StorageHeaderMenu;

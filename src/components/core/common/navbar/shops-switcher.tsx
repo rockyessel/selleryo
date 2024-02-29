@@ -1,19 +1,22 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import { ShopProps } from '@/types';
+import { cn, getInitials } from '@/lib/utils/helpers';
+import { Button } from '@/components/ui/button';
+import CreateShop from '@/components/actions/create-shop';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { ComponentPropsWithoutRef, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   CaretSortIcon,
   CheckIcon,
   PlusCircledIcon,
-} from "@radix-ui/react-icons"
-
-
+} from '@radix-ui/react-icons';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -22,130 +25,91 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { cn } from "@/lib/utils/helpers"
+} from '@/components/ui/command';
+import Link from 'next/link';
 
-const groups = [
-  {
-    label: "Personal Account",
-    teams: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
-    label: "Teams",
-    teams: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-]
+type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>;
 
-type Team = (typeof groups)[number]["teams"][number]
+interface ShopsSwitcherProps extends PopoverTriggerProps {
+  shops: ShopProps[];
+}
 
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
-
-interface ShopsSwitcherProps extends PopoverTriggerProps {}
-
-export default function ShopsSwitcher({ className }: ShopsSwitcherProps) {
-  const [open, setOpen] = React.useState(false)
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(
-    groups[0].teams[0]
-  )
+const ShopsSwitcher = ({ className, shops }: ShopsSwitcherProps) => {
+  const [open, setOpen] = useState(false);
+  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
+  const [selectedShop, setSelectedShop] = useState<ShopProps>(shops[0]);
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
-            role="combobox"
+            variant='outline'
+            role='combobox'
             aria-expanded={open}
-            aria-label="Select a team"
-            className={cn("w-[200px] justify-between", className)}
+            aria-label='Select a team'
+            className={cn('w-[200px] justify-between', className)}
           >
-            <Avatar className="mr-2 h-5 w-5">
+            <Avatar className='mr-2 h-5 w-5'>
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
-                className="grayscale"
+                src={
+                  selectedShop.image ??
+                  'https://dashboard.convex.dev/convex-logo-only.svg'
+                }
+                alt={selectedShop.name}
+                className='grayscale'
               />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>{getInitials(selectedShop.name)}</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
-            <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+            {selectedShop.name}
+            <CaretSortIcon className='ml-auto h-4 w-4 shrink-0 opacity-50' />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className='w-[200px] p-0'>
           <Command>
             <CommandList>
-              <CommandInput placeholder="Search team..." />
+              <CommandInput placeholder='Search team...' />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
+              <CommandGroup heading={'Shops'}>
+                {shops.map((shop, index) => (
+                  <Link
+                    key={index}
+                    target='_blank'
+                    href={`/dashboard/${shop._id}/admin`}
+                  >
                     <CommandItem
-                      key={team.value}
                       onSelect={() => {
-                        setSelectedTeam(team)
-                        setOpen(false)
+                        setSelectedShop(shop);
+                        setOpen(false);
                       }}
-                      className="text-sm"
+                      className='text-sm'
                     >
-                      <Avatar className="mr-2 h-5 w-5">
+                      <Avatar className='mr-2 h-5 w-5'>
                         <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
+                          src={
+                            shop.image ??
+                            'https://dashboard.convex.dev/convex-logo-only.svg'
+                          }
+                          alt={shop.name}
+                          className='grayscale'
                         />
-                        <AvatarFallback>SC</AvatarFallback>
+                        <AvatarFallback>
+                          {getInitials(shop.name)}
+                        </AvatarFallback>
                       </Avatar>
-                      {team.label}
+                      {shop.name}
                       <CheckIcon
                         className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
-                            ? "opacity-100"
-                            : "opacity-0"
+                          'ml-auto h-4 w-4',
+                          selectedShop.subdomain === shop.subdomain
+                            ? 'opacity-100'
+                            : 'opacity-0'
                         )}
                       />
                     </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
+                  </Link>
+                ))}
+              </CommandGroup>
             </CommandList>
             <CommandSeparator />
             <CommandList>
@@ -153,12 +117,12 @@ export default function ShopsSwitcher({ className }: ShopsSwitcherProps) {
                 <DialogTrigger asChild>
                   <CommandItem
                     onSelect={() => {
-                      setOpen(false)
-                      setShowNewTeamDialog(true)
+                      setOpen(false);
+                      setShowNewTeamDialog(true);
                     }}
                   >
-                    <PlusCircledIcon className="mr-2 h-5 w-5" />
-                    Create Team
+                    <PlusCircledIcon className='mr-2 h-5 w-5' />
+                    Create Shop
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>
@@ -166,50 +130,9 @@ export default function ShopsSwitcher({ className }: ShopsSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
-          <DialogDescription>
-            Add a new team to manage products and customers.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
-            Cancel
-          </Button>
-          <Button type="submit">Continue</Button>
-        </DialogFooter>
-      </DialogContent>
+      <CreateShop setShowNewTeamDialog={setShowNewTeamDialog} />
     </Dialog>
-  )
-}
+  );
+};
+
+export default ShopsSwitcher;

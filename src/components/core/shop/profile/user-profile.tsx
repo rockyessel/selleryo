@@ -5,14 +5,14 @@ import Image from 'next/image';
 import { SyntheticEvent, useState } from 'react';
 
 interface Props {
-  session: any
+  session: any;
 }
 
 const UserProfile = ({ session }: Props) => {
   const [bio, setBio] = useState('');
   const [name, setName] = useState('');
 
-  console.log('session: ', session);
+  // console.log('session: ', session);
 
   const handleSubmission = async (event: SyntheticEvent) => {
     event.preventDefault();

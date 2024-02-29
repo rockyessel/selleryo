@@ -1,3 +1,4 @@
+import { Id } from '../../convex/_generated/dataModel';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface ChildrenProps {
@@ -19,12 +20,12 @@ export type CatchError = {
 };
 
 export type CartContextProps = {
-  getItemQuantity: (_id: number) => number;
-  increaseCartQuantity: (_product: any) => void;
-  decreaseCartQuantity: (_product: any) => void;
-  removeFromCart: (_id: number) => void;
+  getItemQuantity: (_id: Id<'products'>) => number;
+  increaseCartQuantity: (_product: ProductProps) => void;
+  decreaseCartQuantity: (_product: ProductProps) => void;
+  removeFromCart: (_id: Id<'products'>) => void;
   getTotalPrice: () => number;
-  getSelectOrderId: (_orderId: string) => void;
+  getSelectOrderId: (_orderId: Id<'orders'>) => void;
   orderId: string;
   cartQuantity: number;
   cartItems: any[];
@@ -37,54 +38,56 @@ export type CartContextProps = {
   setPaymentMethod: Dispatch<SetStateAction<string>>;
 };
 
-export interface Category {
+export interface CategoryProps {
   name: string;
   slug: string;
 }
 
-export interface Tag {
+export interface TagProps {
   name: string;
   slug: string;
 }
 
-export interface ProductReview {
+export interface ProductReviewProps {
   productId: string;
   userId: string;
   rating: number;
   comment?: string;
 }
 
-export interface WishList {
+export interface WishListProps {
   productId: string;
   userId: string;
 }
 
-export interface Product {
+export interface ProductProps {
+  _id: Id<'products'>;
   name: string;
   slug: string;
   description: string;
+  quantity: number;
   shortDescription: string;
   images: string[];
   currentPrice: string;
   previousPrice: string;
   visibility: string;
-  categories: Category[];
-  tags: Tag[];
+  categories: CategoryProps[];
+  tags: TagProps[];
   stockQuantity: number;
   sku_barCode: string;
-  addedById: string;
+  addedById: Id<'users'>;
   date: string;
-  shopId: string;
+  shopId: Id<'shops'>;
 }
 
-export interface Order {
+export interface OrderProps {
   id: string;
   tax: string;
   discount: string;
   customer: string;
   subTotal: string;
   orderNumber: string;
-  orders: Product[];
+  orders: ProductProps[];
   shippingCharge: string;
   billingAddressId: string;
   shippingAddressId: string;
@@ -96,28 +99,32 @@ export interface Order {
   date: string;
   orderStatus: string;
   paymentStatus: string;
-  shopId: string;
+  shopId: Id<'shops'>;
 }
 
-export interface Shop {
-  tags: string[];
+export interface ShopProps {
+  _id: Id<'shops'>;
+  shopAdmin: Id<'users'>;
+  createdBy: Id<'users'>;
+  tags: string;
   image: string;
   name: string;
   categories: string;
   subdomain: string;
   customDomain: string;
-  createdBy: string;
   favicon: string;
   title: string;
   description: string;
 }
 
-export interface ShopRole {
-  role: string;
-  shopId: string;
+export interface ShopRoleProps {
+  shopId: Id<'shops'>;
+  userId: Id<'users'>;
+  role: 'admin' | 'support';
 }
 
-export interface User {
+export interface UserProps {
+  _id: Id<'users'>;
   name: string;
   username: string;
   email: string;
@@ -128,16 +135,17 @@ export interface User {
   authType: string;
   phoneNumber?: string;
   isVerified?: boolean;
-  shopRole?: ShopRole[];
+  shopRoles: ShopRoleProps[];
 }
 
-export interface File {
+export interface FileProps {
   folderId?: string;
   storageId: string;
   uploadedBy: string;
+  fileUrl: string;
 }
 
-export interface Folder {
+export interface FolderProps {
   shopId: string;
   name: string;
   description: string;

@@ -29,7 +29,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const AddImagePreview = ({ image, alt }: { image: any; alt: string }) => {
   const [order, setOrder] = useState(1);
-  console.log('selected image: ', image);
+  // console.log('selected image: ', image);
   return (
     <div>
       <div className='relative overflow-hidden bg-slate-50 border border-slate-200 w-full h-44 shadow-md'>
@@ -106,13 +106,13 @@ const CategoryPage = () => {
   const handleImageSelection = (imagesData: any) => {
     const newObj = { file: imagesData[0], alt: '' };
 
-    console.log('newObj: ', newObj);
+    // console.log('newObj: ', newObj);
 
     setImage(newObj);
   };
 
   const handleSubmission = async () => {
-    console.log('Image: ', image);
+    // console.log('Image: ', image);
 
     // Check if required fields are filled
     if (!name || !description || !image) {

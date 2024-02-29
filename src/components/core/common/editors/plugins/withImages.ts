@@ -13,7 +13,7 @@ export const withImages = (editor: SlateEditor) => {
 
     const { files } = data;
 
-    console.log('Files: ', files);
+    // console.log('Files: ', files);
 
     if (files && files.length > 0) {
       for (const file of files) {
@@ -23,7 +23,7 @@ export const withImages = (editor: SlateEditor) => {
         if (mime === 'image') {
           reader.addEventListener('load', () => {
             const url = reader.result;
-            console.log('READER URL: ', url);
+            // console.log('READER URL: ', url);
             //TODO fix URL Type: Current Type is: "string | ArrayBuffer | null"
             insertImage(editor, String(url)!);
           });

@@ -25,7 +25,12 @@ export const shopsMethod = api.core.shop.index;
 
 export const fileUpload = async (file: File) => {
   const uploadURL = await fetchMutation(storageMethod.file.generateUploadUrl);
-  const result = await fetch(uploadURL, { method: 'POST', headers: { 'Content-Type': file.type }, body: file });
+  // console.log('file.type: ', file.type);
+  const result = await fetch(uploadURL, {
+    method: 'POST',
+    headers: { 'Content-Type': file.type },
+    body: file,
+  });
   const { storageId } = await result.json();
   return storageId;
 };

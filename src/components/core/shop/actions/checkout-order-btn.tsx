@@ -89,7 +89,7 @@ const CheckoutOrderBtn = ({ className, ...props }: Props) => {
         if (orderDocId) {
           toast.success('Order placed successfully.');
           // await redirectToCheckout();
-          console.log('orderInitialValue: ', orderInitialValue);
+          // console.log('orderInitialValue: ', orderInitialValue);
           toast.info('Redirecting you to checkout.');
           // router.push(`/dashboard/orders/${orderDocId}`);
         }

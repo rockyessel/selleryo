@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { cn } from '@/lib/utils/helpers';
+import CartItemCard from './item';
 import { useCart } from '@/context/cart';
-import CartItemCard from './cart-item-card';
+import { cn } from '@/lib/utils/helpers';
 import { Frown, ShoppingCart } from 'lucide-react';
-import { DetailedHTMLProps, Fragment, HTMLAttributes } from 'react';
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -14,33 +14,30 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { getClientUser } from '@/hooks/useGetClientUser';
 
 interface Props
-  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
-  isSticky?: boolean;
-}
+  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-const AsideCart = (props: Props) => {
-  const { isSticky, ...rest } = props;
+const AsideCart = ({ className, ...props }: Props) => {
   const { cartItems, getTotalPrice } = useCart();
+  const session = getClientUser();
+
+  console.log('session: ', session);
 
   return (
-    <aside {...rest}>
+    <aside className={cn(className)} {...props}>
       <Sheet>
-        <SheetTrigger>
-          <span className='relative'>
-            <span className='absolute -top-1 right-0 inline-flex items-center justify-center self-center text-xs p-1 rounded-full bg-red-500 text-white w-4 h-4'>
-              {cartItems.length}
-            </span>
-            <ShoppingCart
-              className={cn(
-                'mt-1.5 p-1 bg-transparent text-white rounded-full hover:bg-teal-700 hover:text-teal-200',
-                isSticky ? 'text-black bg-gray-200' : ''
-              )}
-              strokeWidth={1}
-              size={28}
-            />
-          </span>
+        <SheetTrigger className='relative'>
+          <Button variant='outline' className='p-1'>
+            {session && session._id && (
+              <span className='absolute -top-1 right-0 inline-flex items-center justify-center self-center text-xs p-1 rounded-full bg-black text-white w-4 h-4'>
+                {cartItems.length}
+              </span>
+            )}
+            <ShoppingCart strokeWidth={0.5} />
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>

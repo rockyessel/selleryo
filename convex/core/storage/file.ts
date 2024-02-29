@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { mutation } from '../../_generated/server';
+import { mutation, query } from '../../_generated/server';
 import { FileSchema } from '../../schema';
 import { Id } from '../../_generated/dataModel';
 
@@ -10,7 +10,7 @@ export const createFile = mutation({
   },
 });
 
-export const listAllFilesByUserId = mutation({
+export const listAllFilesByUserId = query({
   args: { userId: v.id('users') },
   handler: async (ctx, args) => {
     const files = await ctx.db
@@ -18,12 +18,13 @@ export const listAllFilesByUserId = mutation({
       .filter((q) => q.eq(q.field('uploadedBy'), args.userId))
       .collect();
 
-    return Promise.all(
+    const allFiles = Promise.all(
       files.map(async (file) => ({
         ...file,
         ...{ fileUrl: await ctx.storage.getUrl(file.storageId) },
       }))
     );
+    return allFiles;
   },
 });
 

@@ -38,8 +38,8 @@ const GridImageElement = ({ renderProps }: ElementProps) => {
             key={index}
             src={image.src}
             alt={`Image ${index + 1}`}
-            onClick={() => console.log('clicked: ', index)}
-            onSelect={() => console.log('select: ', index)}
+            // onClick={() => // console.log('clicked: ', index)}
+            // onSelect={() => // console.log('select: ', index)}
           />
         ))}
       </div>

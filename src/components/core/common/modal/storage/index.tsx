@@ -1,22 +1,13 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Sidebar } from './sidebar';
-import { Menu } from '../../menu';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import Content from './content';
 import { useState } from 'react';
+import Sidebar from './sidebar';
 
 export type StorageModalSidebarItem =
-  | 'recent-upload'
+  | 'recent-uploads'
   | 'files'
   | 'folders'
   | 'enter-url'
@@ -24,10 +15,10 @@ export type StorageModalSidebarItem =
 
 const StorageModal = () => {
   const [selectItem, setSelectItem] =
-    useState<StorageModalSidebarItem>('device');
+    useState<StorageModalSidebarItem>('recent-uploads');
 
   return (
-    <Dialog open>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant='outline'>Edit Profile</Button>
       </DialogTrigger>

@@ -14,7 +14,7 @@
 //       const font = (parentNode as unknown as CustomText)?.font;
 
 //       if (font) {
-//         console.log('withFont: ', font);
+//         // console.log('withFont: ', font);
 //         Transforms.setNodes(
 //           editor,
 //           { font },

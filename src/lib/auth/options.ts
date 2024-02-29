@@ -4,8 +4,8 @@ import LinkedInProvider from 'next-auth/providers/linkedin';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createUser, validateUser } from '../server';
 import { fetchQuery } from 'convex/nextjs';
-import { docMethod } from '../convex';
-
+import { docMethod, shopsMethod } from '../convex';
+import { Id } from '../../../convex/_generated/dataModel';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -37,7 +37,7 @@ export const authOptions: AuthOptions = {
         password: { label: 'password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log('credentials: ',credentials)
+        // console.log('credentials: ',credentials)
         const email = credentials?.email;
         const password = credentials?.password;
         if (!email || !password) return null;
@@ -60,11 +60,16 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       const { email } = token;
-      const user = await fetchQuery(docMethod.getDocByField, {
-        docType: 'users',
-        field: 'email',
-        value: email!,
-      });
+      const fetchUser = await fetchQuery(docMethod.getDocByField, { docType: 'users', field: 'email', value: email! });
+      const { password, ...user } = fetchUser;
+      const userId = user._id as Id<'users'>;
+      const shopRoles = await fetchQuery(shopsMethod.getShopRoleByUserId, { userId });
+      const roles = shopRoles.map((role) => {
+        const { _creationTime, _id, userId, ...rest } = role
+        return rest
+      })
+      user.shopRoles = roles;
+
       if (user !== null) {
         session.user = { ...user };
       }

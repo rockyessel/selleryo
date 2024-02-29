@@ -1,6 +1,7 @@
 'use client';
 
-import { CartContextProps } from '@/types';
+import { Id } from '../../convex/_generated/dataModel';
+import { CartContextProps, ProductProps } from '@/types';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { cartContextInitValues } from '@/lib/utils/constants';
 import { createContext, ReactNode, useContext, useState } from 'react';
@@ -13,20 +14,14 @@ const CartContext = createContext<CartContextProps>(cartContextInitValues);
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [orderId, setOrderId] = useState('');
-  const [cartItems, setCartItems] = useLocalStorage<any[] | []>('cart', []);
   const [schedule, setSchedule] = useLocalStorage<any>('schedule', {});
-  const [paymentMethod, setPaymentMethod] = useLocalStorage<string>(
-    'payment-method',
-    ''
-  );
-  const [selectedShippingAddress, setSelectedShippingAddress] =
-    useLocalStorage<any>('shipping', {});
-  const [selectedBillingAddress, setSelectedBillingAddress] =
-    useLocalStorage<any>('billing', {});
+  const [cartItems, setCartItems] = useLocalStorage<ProductProps[] | []>('cart', []);
+  const [paymentMethod, setPaymentMethod] = useLocalStorage<string>('payment-method', '');
+  const [selectedBillingAddress, setSelectedBillingAddress] = useLocalStorage<any>('billing', {});
+  const [selectedShippingAddress, setSelectedShippingAddress] = useLocalStorage<any>('shipping', {});
 
   const handleSelection = (address: any) => {
     const { addressType } = address;
-
     if (addressType === 'Shipping') {
       setSelectedShippingAddress(address);
     } else if (addressType === 'Billing') {
@@ -34,25 +29,19 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   };
 
-  const getSelectOrderId = (orderId: string) => setOrderId(orderId);
-  const cartQuantity = cartItems.reduce(
-    (quantity, item) => item.quantity + quantity,
-    0
-  );
-  const getItemQuantity = (id: number) =>
-    cartItems.find((item) => item.id === id)?.quantity || 0;
-  const getTotalPrice = (): number =>
-    cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  const removeFromCart = (id: number) =>
-    setCartItems((currItems) => currItems.filter((item) => item.id !== id));
+  const getSelectOrderId = (orderId: Id<'orders'>) => setOrderId(orderId);
+  const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0);
+  const getItemQuantity = (id: Id<'products'>) => cartItems.find((item) => item._id === id)?.quantity || 0;
+  const getTotalPrice = (): number => cartItems.reduce((total, item) => total + Number(item.currentPrice) * item.quantity, 0);
+  const removeFromCart = (id: Id<'products'>) => setCartItems((currItems) => currItems.filter((item) => item._id !== id));
 
-  const increaseCartQuantity = (product: any) => {
+  const increaseCartQuantity = (product: ProductProps) => {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === product.id) == null) {
+      if (currItems.find((item) => item._id === product._id) == null) {
         return [...currItems, { ...product, quantity: 1 }];
       } else {
         return currItems.map((item) => {
-          if (item.id === product.id) {
+          if (item._id === product._id) {
             return { ...item, quantity: item.quantity + 1 };
           } else {
             return item;
@@ -62,13 +51,13 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
-  const decreaseCartQuantity = (product: any) => {
+  const decreaseCartQuantity = (product: ProductProps) => {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === product.id)?.quantity === 1) {
-        return currItems.filter((item) => item.id !== product.id);
+      if (currItems.find((item) => item._id === product._id)?.quantity === 1) {
+        return currItems.filter((item) => item._id !== product._id);
       } else {
         return currItems.map((item) => {
-          if (item.id === product.id) {
+          if (item._id === product._id) {
             return { ...item, quantity: item.quantity - 1 };
           } else {
             return item;
@@ -78,7 +67,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
-  const values = {
+  const values: CartContextProps = {
     getItemQuantity,
     increaseCartQuantity,
     decreaseCartQuantity,
