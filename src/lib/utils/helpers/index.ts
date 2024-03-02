@@ -3,6 +3,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
+import { assignedMimeTypes, mimeTypes } from '../constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -208,3 +209,30 @@ export const getInitials = (name: string, numberOfInitials: number = 2): string 
 
   return initials.join('');
 };
+
+
+
+/**
+ * Sets the mimeType of a file if it is not provided or empty.
+ * @param file - The file object.
+ * @returns The updated file object with the mimeType set.
+ */
+export const fileMimeTypeSetter = (file: File): File => {
+  // Check if the file object exists and if its mimeType is empty
+  if (file && file.type === '') {
+    const extension = file.name.toLowerCase().split('.').pop(); // Get the file extension
+    const isMimeTypePresentInArr = mimeTypes?.includes(`${extension}`); // Check if the mimeType is present in the allowed mimeTypes array
+
+    if (isMimeTypePresentInArr) {
+      // If the mimeType is present in the allowed mimeTypes array, create a new File object with the updated mimeType
+      const updatedFile = new File([file], file.name, {
+        type: assignedMimeTypes[`${extension}`], // Assign the appropriate mimeType based on the extension
+      });
+
+      return updatedFile;
+    }
+  }
+
+  return file; // Return the file object as-is if the mimeType is already provided or if it doesn't match the allowed mimeTypes
+};
+

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { NavigationalMenu } from '@/components/core/shop/common/navbar';
+import MarketFooter from '@/components/core/common/footer';
 
 interface Props {
   children: ReactNode;
@@ -16,6 +17,7 @@ const RootLayout = async ({ children }: Props) => {
     <main className='px-6'>
       <NavigationalMenu />
       {children}
+      <MarketFooter />
     </main>
   );
 };

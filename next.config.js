@@ -14,7 +14,8 @@ const nextConfig = {
             { hostname: "cdn.builder.io" },
             { hostname: "upload.wikimedia.org" },
             { hostname: "images.unsplash.com" },
-            { hostname: 'perfect-buffalo-199.convex.cloud' }
+            { hostname: 'perfect-buffalo-199.convex.cloud' },
+            { hostname: 'target.scene7.com' }
         ]
     },
 }

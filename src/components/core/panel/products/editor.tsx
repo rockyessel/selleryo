@@ -21,76 +21,114 @@ interface Props {
 }
 
 const ProductEditor = ({ userId, exitinPproduct }: Props) => {
-  const productInit = {
-    name: `Upcoming Webinar: Using Cypress and Github Actions to Build an Automation Pipeline`,
-    slug: createSlug(
-      `Upcoming Webinar: Using Cypress and Github Actions to Build an Automation Pipeline`
-    ),
-    shortDescription: `Learn how to revolutionize your software testing process with automated CI/CD using Cypress and GitHub Actions. Join the webinar to explore the benefits of automation, see demos of setup and implementation, and get answers to your questions.`,
-    description: JSON.stringify(initialValue),
-    images: `https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png`,
-    price: '200',
-    compareAtPrice: '300',
-    visibility: 'published',
-    categories: 'Electronics',
-    tags: 'Laptops Laptop-Case HP-Laptop',
-    stockQuantity: 10,
-    sku_barCode: 'SKU490340',
-    addedById: 'jd7dcehxns3xad7d663jctqtxs6m7p8c',
-    date: new Date().toISOString(),
-    shopId: 'jn72p8srjdpqdf2g3zpbxadg0s6mb990',
-    reviews: [
-      {
-        productId: 'js7d8gxm1e45yqjan5w8gpexp16matq9',
-        userId: 'jd7dcehxns3xad7d663jctqtxs6m7p8c',
-        shopId: 'jn72p8srjdpqdf2g3zpbxadg0s6mb990',
-        rating: 5,
-        title: 'Loved it.',
-        comment: 'I enjoyed using this product',
-        photos: [
-          'https://cdn.shopify.com/s/files/1/2303/2711/files/2_e822dae0-14df-4cb8-b145-ea4dc0966b34.jpg?v=1617059123',
-          'https://expertphotography.b-cdn.net/wp-content/uploads/2018/04/product-photography-tips-2-1.jpg',
-        ],
-        wouldRecommend: true,
-        recommendationCount: 100,
-      },
-    ],
-    isVariantEnabled: true,
-    variants: [
-      {
-        optionName: 'size',
-        optionsValues: [1, 3, 4, 5],
-        images: [''],
-        price: '',
-        compareAtPrice: '',
-        costPrice: '',
-      },
-      {
-        optionName: 'color',
-        optionsValues: ['black', 'yellow', 'blue', 'red'],
-        images: [''],
-        price: '',
-        compareAtPrice: '',
-        costPrice: '',
-      },
-      {
-        optionName: 'material',
-        optionsValues: ['soil', 'plastics', 'wood', 'metal'],
-        images: [''],
-        price: '',
-        compareAtPrice: '',
-        costPrice: '',
-      },
-      {
-        optionName: 'style',
-        optionsValues: ['paris', 'africa', 'euro', 'japan'],
-        images: [''],
-        price: '',
-        compareAtPrice: '',
-        costPrice: '',
-      },
-    ],
-  };
+  // const productInit = {
+  //   name: `Upcoming Webinar: Using Cypress and Github Actions to Build an Automation Pipeline`,
+  //   slug: createSlug(
+  //     `Upcoming Webinar: Using Cypress and Github Actions to Build an Automation Pipeline`
+  //   ),
+  //   shortDescription: `Learn how to revolutionize your software testing process with automated CI/CD using Cypress and GitHub Actions. Join the webinar to explore the benefits of automation, see demos of setup and implementation, and get answers to your questions.`,
+  //   description: JSON.stringify(initialValue),
+  //   images: `https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png https://cypress-io.ghost.io/blog/content/images/2024/02/Social_Customer-Spotlight_022624.png`,
+  //   price: '200',
+  //   compareAtPrice: '300',
+  //   visibility: 'published',
+  //   categories: 'Electronics',
+  //   tags: 'Laptops Laptop-Case HP-Laptop',
+  //   totalStockQuantity: 10,
+  //   sku_barCode: 'SKU490340',
+  //   addedById: 'jd7dcehxns3xad7d663jctqtxs6m7p8c',
+  //   date: new Date().toISOString(),
+  //   shopId: 'jn72p8srjdpqdf2g3zpbxadg0s6mb990',
+  //   reviews: [
+  //     {
+  //       productId: 'js7d8gxm1e45yqjan5w8gpexp16matq9',
+  //       userId: 'jd7dcehxns3xad7d663jctqtxs6m7p8c',
+  //       shopId: 'jn72p8srjdpqdf2g3zpbxadg0s6mb990',
+  //       rating: 5,
+  //       title: 'Loved it.',
+  //       comment: 'I enjoyed using this product',
+  //       photos: [
+  //         'https://cdn.shopify.com/s/files/1/2303/2711/files/2_e822dae0-14df-4cb8-b145-ea4dc0966b34.jpg?v=1617059123',
+  //         'https://expertphotography.b-cdn.net/wp-content/uploads/2018/04/product-photography-tips-2-1.jpg',
+  //       ],
+  //       wouldRecommend: true,
+  //       recommendationCount: 100,
+  //     },
+  //   ],
+  //   isVariantEnabled: true,
+  //   variants: [
+  //     {
+  //       optionName: 'size',
+  //       optionsValues: [
+  //         {
+  //           value: 1,
+  //           quantity: 2,
+  //           images: [''],
+  //           price: '',
+  //           compareAtPrice: '',
+  //           costPrice: '',
+  //           shippingOption: [
+  //             { type: 'pickup' },
+  //             { type: 'delivery' },
+  //             { type: 'shipping' },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       optionName: 'color',
+  //       optionsValues: [
+  //         {
+  //           value: 'black',
+  //           quantity: 2,
+  //         },
+  //         {
+  //           value: 'yellow',
+  //           quantity: 5,
+  //         },
+  //         {
+  //           value: 'blue',
+  //           quantity: 3,
+  //         },
+  //         {
+  //           value: 'red',
+  //           quantity: 1,
+  //         },
+  //       ],
+  //       images: [''],
+  //       price: '',
+  //       compareAtPrice: '',
+  //       costPrice: '',
+  //       shippingOption: [{ type: 'pickup' }, { type: 'delivery' }],
+  //     },
+  //     {
+  //       optionName: 'material',
+  //       optionsValues: ['soil', 'plastics', 'wood', 'metal'],
+  //       images: [''],
+  //       price: '',
+  //       compareAtPrice: '',
+  //       costPrice: '',
+  //       shippingOption: [
+  //         { type: 'pickup' },
+  //         { type: 'delivery' },
+  //         { type: 'shipping' },
+  //       ],
+  //     },
+  //     {
+  //       optionName: 'style',
+  //       optionsValues: ['paris', 'africa', 'euro', 'japan'],
+  //       images: [''],
+  //       price: '',
+  //       compareAtPrice: '',
+  //       costPrice: '',
+  //       shippingOption: [
+  //         { type: 'pickup' },
+  //         { type: 'delivery' },
+  //         { type: 'shipping' },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const addProduct = useMutation(productMethod.createProduct);
 
@@ -112,7 +150,14 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
   return (
     <div>
       <div>
-        <Button onClick={() => addProduct({ ...product })}>
+        <Button
+          onClick={() =>
+            addProduct({
+              ...product,
+              isProductOnMarket: true,
+            })
+          }
+        >
           Publish Product
         </Button>
       </div>

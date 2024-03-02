@@ -5,7 +5,18 @@ import { useMutation } from 'convex/react';
 import { Id } from '../../convex/_generated/dataModel';
 import { fileUpload, storageMethod } from '@/lib/convex';
 import { getClientUser } from '@/hooks/useGetClientUser';
-import { ChangeEvent, createContext, Dispatch, ReactNode, SetStateAction, SyntheticEvent, useContext, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { fileMimeTypeSetter } from '@/lib/utils/helpers';
 
 interface Props {
   children: ReactNode;
@@ -16,10 +27,13 @@ interface ConvexStorageProps {
   handleSubmision: (event: SyntheticEvent) => Promise<void>;
   handleRemoveSelectedFiles: (name: string[]) => void;
   handleSelection: (file: File, type: 'select' | 'deselect') => void;
-  handleSelectionDBFiles: (fileUrl: string, type: 'select' | 'deselect') => void
+  handleSelectionDBFiles: (
+    fileUrl: string,
+    type: 'select' | 'deselect'
+  ) => void;
   setFiles: Dispatch<SetStateAction<File[]>>;
   isInCheckState: boolean;
-  selectedDBFile: string[]
+  selectedDBFile: string[];
   selectedFiles: File[];
   files: File[];
 }
@@ -28,7 +42,7 @@ const ConvexStorageContext = createContext<ConvexStorageProps>({
   handleUpload: (_event) => {},
   handleSubmision: (_event) => Promise.resolve(),
   handleRemoveSelectedFiles: (_name) => {},
-  handleSelection: (_file, _type) => { },
+  handleSelection: (_file, _type) => {},
   handleSelectionDBFiles: (_fileUrl, _type) => {},
   setFiles: () => {},
   isInCheckState: false,
@@ -40,19 +54,24 @@ const ConvexStorageContext = createContext<ConvexStorageProps>({
 export const ConvexStorageContextProvider = ({ children }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [selectedDBFile, setSelectedDBFiles] = useState<string[]>([])
+  const [selectedDBFile, setSelectedDBFiles] = useState<string[]>([]);
   const [isInCheckState, setIsInCheckState] = useState(false);
   const user = getClientUser();
 
-
-
-
-  const handleSelectionDBFiles = (fileUrl: string, type: 'select' | 'deselect') => {
+  const handleSelectionDBFiles = (
+    fileUrl: string,
+    type: 'select' | 'deselect'
+  ) => {
     setIsInCheckState(true);
     if (type === 'select') {
-      setSelectedDBFiles((prevSelectedFilesUrl) => [...prevSelectedFilesUrl, fileUrl]);
+      setSelectedDBFiles((prevSelectedFilesUrl) => [
+        ...prevSelectedFilesUrl,
+        fileUrl,
+      ]);
     } else if (type === 'deselect') {
-      setSelectedDBFiles((prevSelectedFilesUrl) => prevSelectedFilesUrl.filter((url) => url !== fileUrl));
+      setSelectedDBFiles((prevSelectedFilesUrl) =>
+        prevSelectedFilesUrl.filter((url) => url !== fileUrl)
+      );
     }
   };
   const addFile = useMutation(storageMethod.file.createFile);
@@ -71,22 +90,20 @@ export const ConvexStorageContextProvider = ({ children }: Props) => {
     }
   };
 
-const handleSubmision = async (event: SyntheticEvent) => {
-  event.preventDefault();
-  if (files && user) {
-    for (const file of files) {
-      try {
-        const storageId: Id<'_storage'> = await fileUpload(file);
+  const handleSubmision = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (files && user) {
+      for (let i = 0; i <= files.length; i++) {
+        const file = files[i];
+        console.log('file: ', fileMimeTypeSetter(file));
+        const storageId: Id<'_storage'> = await fileUpload(fileMimeTypeSetter(file));
+        console.log('storageId: ', storageId);
         const userId = user?._id as Id<'users'>;
+        console.log('userId: ', userId);
         addFile({ storageId, uploadedBy: userId });
-      } catch (error) {
-        console.error(`Error uploading file: ${file.name}`, error);
-        toast.error(`Failed to upload. Error message: `, error.message)
       }
     }
-  }
-};
-
+  };
 
   const handleSelection = (file: File, type: 'select' | 'deselect') => {
     setIsInCheckState(true);

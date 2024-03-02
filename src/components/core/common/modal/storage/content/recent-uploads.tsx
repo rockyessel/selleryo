@@ -12,7 +12,7 @@ const RecentUploads = () => {
   const [loading, setLoading] = useState(true);
   const [files, setFiles] = useState<FileProps[]>([]);
   const user = getClientUser();
-  // console.log('files: ', files);
+  console.log('files: ', files);
 
   const fetchUserFiles = async (userId: Id<'users'>) => {
     const files = await fetchQuery(storageMethod.file.listAllFilesByUserId, {
