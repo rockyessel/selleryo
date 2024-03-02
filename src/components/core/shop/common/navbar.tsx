@@ -7,7 +7,16 @@ import { cn } from '@/lib/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import { marketStantardCateogries } from '@/lib/utils/constants';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -105,6 +114,54 @@ export function NavigationalMenu() {
                 ))}
               </ul>
             </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className='flex flex-col w-[400px] gap-3 p-4 '>
+                {marketStantardCateogries.map((component) => (
+                  <ListItem
+                    key={component.category}
+                    title={component.category}
+                    href={`/c/${component.category.toLocaleLowerCase()}`}
+                  >
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger>
+                        {component.category}
+                      </NavigationMenuTrigger>
+
+                      <NavigationMenuContent>
+                        <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                          {components.map((component) => (
+                            <ListItem
+                              key={component.title}
+                              title={component.title}
+                              href={component.href}
+                            >
+                              {component.description}
+                            </ListItem>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href='/docs' legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Documentation
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href='/docs' legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Documentation
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href='/docs' legacyBehavior passHref>

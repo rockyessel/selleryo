@@ -19,6 +19,7 @@ import type * as core_shop_categories from "../core/shop/categories.js";
 import type * as core_shop_index from "../core/shop/index.js";
 import type * as core_shop_orders from "../core/shop/orders.js";
 import type * as core_shop_products from "../core/shop/products.js";
+import type * as core_shop_questions from "../core/shop/questions.js";
 import type * as core_shop_reviews from "../core/shop/reviews.js";
 import type * as core_shop_tags from "../core/shop/tags.js";
 import type * as core_storage_file from "../core/storage/file.js";
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   "core/shop/index": typeof core_shop_index;
   "core/shop/orders": typeof core_shop_orders;
   "core/shop/products": typeof core_shop_products;
+  "core/shop/questions": typeof core_shop_questions;
   "core/shop/reviews": typeof core_shop_reviews;
   "core/shop/tags": typeof core_shop_tags;
   "core/storage/file": typeof core_storage_file;

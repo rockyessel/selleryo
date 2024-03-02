@@ -128,3 +128,13 @@ export const FolderSchema = {
   description: v.string(),
   fileLists: v.array(v.id('files')),
 };
+
+export const AnswersSchema = {
+  userId: v.optional(v.id('users')),
+  ans: v.string(),
+};
+
+export const QuestionsSchema = {
+  question: v.string(),
+  answers: v.array(v.object(AnswersSchema)),
+};

@@ -57,3 +57,33 @@ export const getAllMartketableProduct = query({
     return f;
   },
 });
+
+export const getProductBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const products = await ctx.db
+      .query('products')
+      .filter((q) => q.eq(q.field('slug'), slug))
+      .filter((q) => q.eq(q.field('visibility'), 'published'))
+      .filter((q) => q.eq(q.field('displayOnMartket'), true))
+      .collect();
+
+    console.log('products: ', products);
+
+    const p = products.map(async (product) => {
+      const shop = await ctx.db.get(product.shopId);
+      const reviews = await ctx.db
+        .query('reviews')
+        .filter((q) => q.eq(q.field('shopId'), product.shopId))
+        .filter((q) => q.eq(q.field('productId'), product._id))
+        .collect();
+
+      return {
+        ...product,
+        ...{ reviews, shop },
+      };
+    });
+    const f = await Promise.all(p);
+    return f;
+  },
+});

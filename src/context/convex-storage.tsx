@@ -71,20 +71,22 @@ export const ConvexStorageContextProvider = ({ children }: Props) => {
     }
   };
 
-  const handleSubmision = async (event: SyntheticEvent) => {
-    event.preventDefault();
-    if (files && user) {
-      for (let i = 0; i <= files.length; i++) {
-        const file = files[i];
-        // console.log('file: ', file);
+const handleSubmision = async (event: SyntheticEvent) => {
+  event.preventDefault();
+  if (files && user) {
+    for (const file of files) {
+      try {
         const storageId: Id<'_storage'> = await fileUpload(file);
-        // console.log('storageId: ', storageId);
         const userId = user?._id as Id<'users'>;
-        // console.log('userId: ', userId);
         addFile({ storageId, uploadedBy: userId });
+      } catch (error) {
+        console.error(`Error uploading file: ${file.name}`, error);
+        toast.error(`Failed to upload. Error message: `, error.message)
       }
     }
-  };
+  }
+};
+
 
   const handleSelection = (file: File, type: 'select' | 'deselect') => {
     setIsInCheckState(true);
