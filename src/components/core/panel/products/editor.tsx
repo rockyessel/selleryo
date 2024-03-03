@@ -3,17 +3,49 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import StorageModal from '../../common/modal/storage';
 import { ImagePlus } from 'lucide-react';
-import { createSlug } from '@/lib/utils/helpers';
+import { cn, createSlug, getInitials } from '@/lib/utils/helpers';
 import TextEditor from '../../common/editors';
-import { initialValue } from '../../common/editors/utils/constants';
 import { Button } from '@/components/ui/button';
 import { useMutation } from 'convex/react';
 import { productMethod } from '@/lib/convex';
-import { ProductProps } from '@/types';
+import {
+  ProductProps,
+  ProductVariant,
+  SelectedVariant,
+  SubVariant,
+} from '@/types';
 import { Id } from '../../../../../convex/_generated/dataModel';
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from '@/components/ui/command';
+import Link from 'next/link';
+import {
+  mainCategoriesList,
+  marketStantardCateogries,
+  subCategories,
+} from '@/lib/utils/constants';
+import { findNodeIndexById } from '../../common/editors/utils/helpers';
+import { select } from 'slate';
+import { toast } from 'sonner';
+import { Separator } from '@/components/ui/separator';
 
 interface Props {
   userId: Id<'users'>;
@@ -130,6 +162,118 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
   //   ],
   // };
 
+  const productVariant: ProductVariant = {
+    // Top level properties
+    totalStockQuantity: 100,
+
+    // Options array with nested variants
+    options: [
+      {
+        optionName: 'size',
+        value: 'S',
+        image:
+          'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+        variants: [
+          {
+            optionName: 'colors',
+            options: [
+              {
+                value: 'Red',
+                quantity: 4,
+                price: '2',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [
+                  { type: 'pickup' },
+                  { type: 'delivery' },
+                  { type: 'shipping' },
+                ],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+              {
+                value: 'Blue',
+                quantity: 1,
+                price: '3342',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [{ type: 'pickup' }, { type: 'delivery' }],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+            ],
+          },
+          {
+            optionName: 'materials',
+            options: [
+              {
+                value: 'Wood',
+                quantity: 4,
+                price: '23467',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [
+                  { type: 'pickup' },
+                  { type: 'delivery' },
+                  { type: 'shipping' },
+                ],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+              {
+                value: 'Metal',
+                quantity: 1,
+                price: '42',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [{ type: 'pickup' }, { type: 'delivery' }],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        optionName: 'size',
+        value: 'L',
+        image:
+          'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+        variants: [
+          {
+            optionName: 'colors',
+            options: [
+              {
+                value: 'Red',
+                quantity: 4,
+                price: '1246',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [
+                  { type: 'pickup' },
+                  { type: 'delivery' },
+                  { type: 'shipping' },
+                ],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+              {
+                value: 'Blue',
+                quantity: 1,
+                price: '32',
+                compareAtPrice: '323',
+                costPrice: '100',
+                shippingOptions: [{ type: 'pickup' }, { type: 'delivery' }],
+                image:
+                  'https://target.scene7.com/is/image/Target/GUEST_ecdc8b46-7393-4104-8681-4623390ef41c',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
   const addProduct = useMutation(productMethod.createProduct);
 
   const [product, setProduct] = useState(exitinPproduct);
@@ -147,6 +291,33 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
     setProduct(updatedChange);
   };
 
+  const handleSubmission = async (event: SyntheticEvent) => {
+    event.preventDefault();
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubCategory, setSelectedSubCatefory] = useState('');
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const [tagInput, setTagInput] = useState('');
+  const [dialogState, setDialogState] = useState(false);
+
+  const [mainOptionField, setMainOptionField] = useState<any>();
+
+  const handleAddTags = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      toast.error(`Tag ${tag} is already added.`);
+      return;
+    }
+
+    setSelectedTags((previousTags) => [...previousTags, tag]);
+  };
+
+  const f = {
+    options: [{ ...mainOptionField, ...{ vairants: [{}] } }],
+  };
+
   return (
     <div>
       <div>
@@ -161,9 +332,9 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
           Publish Product
         </Button>
       </div>
-      <form className='flex items-start gap-5'>
+      <form onSubmit={handleSubmission} className='flex items-start gap-5'>
         <fieldset className='w-full flex-1  flex flex-col gap-5'>
-          <fieldset className='rounded-lg border border-gray-200 p-4'>
+          <fieldset className=''>
             <fieldset>
               <Label>Name</Label>
               <Input
@@ -186,7 +357,9 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
             </fieldset>
             <fieldset>
               <Label>Description</Label>
-              <TextEditor />
+              <fieldset className='h-[40rem] overflow-y-auto'>
+                <TextEditor />
+              </fieldset>
             </fieldset>
             <fieldset>
               <Label>Short Description</Label>
@@ -200,7 +373,7 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
             </fieldset>
           </fieldset>
 
-          <fieldset className='rounded-lg border border-gray-200 p-4'>
+          <fieldset className=''>
             <fieldset className='flex items-start'>
               <fieldset>
                 <Label>Current Price</Label>
@@ -225,7 +398,7 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
             </fieldset>
           </fieldset>
 
-          <fieldset className='rounded-lg border border-gray-200 p-4'>
+          <fieldset className=''>
             <fieldset>
               <Label>SKU</Label>
               <Input
@@ -249,7 +422,7 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
           </fieldset>
 
           <fieldset className='rounded-lg border border-gray-200 p-4'>
-            <Label>Image</Label>
+            <Label>Media</Label>
 
             <fieldset className='w-full p-10 inline-flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded-lg'>
               <ImagePlus />
@@ -304,6 +477,198 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
           </fieldset>
         </fieldset>
       </form>
+
+      <fieldset className='border rounded-lg p-2'>
+        <div className='flex items-start'>
+          <fieldset className='w-full h-full p-1 inline-flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded-lg'>
+            <ImagePlus strokeWidth={0.5} />
+          </fieldset>
+
+          <fieldset className='flex items-start gap-2'>
+            <fieldset>
+              <Label>Option name</Label>
+              <Input type='text' placeholder='Enter main variant name' />
+            </fieldset>
+            <fieldset>
+              <Label>Option Value</Label>
+              <Input />
+            </fieldset>
+          </fieldset>
+        </div>
+
+        <Separator />
+
+        <fieldset>
+          <Label>Vairant:</Label>
+
+          <fieldset>
+            <fieldset>
+              <Label>Image</Label>
+              <Input type='file' />
+            </fieldset>
+          </fieldset>
+        </fieldset>
+      </fieldset>
+
+      {/* Tags Addition */}
+      <fieldset>
+        <Dialog open>
+          <Popover
+            open={dialogState}
+            onOpenChange={(open) => setDialogState(open)}
+          >
+            <PopoverTrigger asChild>
+              <Button
+                variant='outline'
+                role='combobox'
+                aria-expanded={open}
+                aria-label='Select a team'
+                className={cn('w-[300px] justify-between')}
+              >
+                {selectedTags.join(' ') || 'Add tags'}
+                <CaretSortIcon className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className='w-[300px] p-0'>
+              <Input
+                type='text'
+                onChange={(event) => setTagInput(event.target.value)}
+                placeholder='Add tags..'
+              />
+
+              <ul className='bg-gray-100 w-full flex flex-col'>
+                <li
+                  onClick={() => {
+                    setTagInput('');
+
+                    handleAddTags(tagInput);
+                    setDialogState(false);
+                  }}
+                >
+                  Add tags
+                </li>
+              </ul>
+            </PopoverContent>
+          </Popover>
+        </Dialog>
+      </fieldset>
+
+      {/* Display tags */}
+      {selectedTags && (
+        <span className='inline-flex items-center gap-2'>
+          {selectedTags.map((tag, index) => (
+            <span className='bg-gray-500 rounded-lg p-1' key={index}>
+              {tag}
+            </span>
+          ))}
+        </span>
+      )}
+
+      <Separator />
+
+      {/* Main Category */}
+      <fieldset>
+        <Dialog open>
+          <Popover>
+            <PopoverTrigger asChild>
+              {/* @ts-ignore */}
+              <Button
+                variant='outline'
+                role='combobox'
+                aria-expanded={open}
+                aria-label='Select a team'
+                className={cn('w-[200px] justify-between')}
+              >
+                {selectedCategory || 'Pick a category'}
+                <CaretSortIcon className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className='w-[300px] p-0'>
+              <Command>
+                <CommandList>
+                  <CommandInput placeholder='Search Category...' />
+                  <CommandEmpty>No team found.</CommandEmpty>
+                  <CommandGroup heading={'Select a category'}>
+                    {mainCategoriesList.map((category, index) => (
+                      <CommandItem
+                        key={index}
+                        onSelect={() => {
+                          setSelectedCategory(category);
+                        }}
+                        className='text-sm'
+                      >
+                        {category}
+                        <CheckIcon
+                          className={cn(
+                            'ml-auto h-4 w-4',
+                            selectedCategory === category
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </Dialog>
+      </fieldset>
+
+      {/* Sub Category Selection */}
+      {selectedCategory && (
+        <fieldset>
+          <Dialog open>
+            <Popover>
+              <PopoverTrigger asChild>
+                {/* @ts-ignore */}
+                <Button
+                  variant='outline'
+                  role='combobox'
+                  aria-expanded={open}
+                  aria-label='Select a team'
+                  className={cn('w-[200px] justify-between')}
+                >
+                  {selectedSubCategory || 'Pick a sub category'}
+                  <CaretSortIcon className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-[300px] p-0'>
+                <Command>
+                  <CommandList>
+                    <CommandInput placeholder='Search Category...' />
+                    <CommandEmpty>No team found.</CommandEmpty>
+                    <CommandGroup heading={'Select a sub category'}>
+                      {subCategories(selectedCategory).map(
+                        (category, index) => (
+                          <CommandItem
+                            key={index}
+                            onSelect={() => {
+                              setSelectedSubCatefory(category);
+                            }}
+                            className='text-sm'
+                          >
+                            {category}
+                            <CheckIcon
+                              className={cn(
+                                'ml-auto h-4 w-4',
+                                selectedSubCategory === category
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                          </CommandItem>
+                        )
+                      )}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </Dialog>
+        </fieldset>
+      )}
     </div>
   );
 };

@@ -6,6 +6,8 @@ import { createUser, validateUser } from '../server';
 import { fetchQuery } from 'convex/nextjs';
 import { docMethod, shopsMethod } from '../convex';
 import { Id } from '../../../convex/_generated/dataModel';
+import { JWT } from 'next-auth/jwt';
+import jsonwebtoken from 'jsonwebtoken';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -47,6 +49,24 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  jwt: {
+    encode: ({ secret, token }) => {
+      return jsonwebtoken.sign(
+        {
+          ...token,
+          iss: 'https://selleryo.vercel.app',
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 5,
+        },
+        secret
+      );
+    },
+    decode: async ({ secret, token }) => {
+      if (!token) {
+        throw new Error('Token is missing');
+      }
+      return jsonwebtoken.verify(token!, secret) as JWT;
+    },
+  },
   pages: {
     signIn: '/account/sign-in',
   },
@@ -59,15 +79,22 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token }) {
+      console.log('token: ', token);
       const { email } = token;
-      const fetchUser = await fetchQuery(docMethod.getDocByField, { docType: 'users', field: 'email', value: email! });
+      const fetchUser = await fetchQuery(docMethod.getDocByField, {
+        docType: 'users',
+        field: 'email',
+        value: email!,
+      });
       const { password, ...user } = fetchUser;
       const userId = user._id as Id<'users'>;
-      const shopRoles = await fetchQuery(shopsMethod.getShopRoleByUserId, { userId });
+      const shopRoles = await fetchQuery(shopsMethod.getShopRoleByUserId, {
+        userId,
+      });
       const roles = shopRoles.map((role) => {
-        const { _creationTime, _id, userId, ...rest } = role
-        return rest
-      })
+        const { _creationTime, _id, userId, ...rest } = role;
+        return rest;
+      });
       user.shopRoles = roles;
 
       if (user !== null) {

@@ -157,3 +157,40 @@ export interface ImageDimensionsProps {
   height: number;
   src: string;
 }
+
+export interface ShippingOption {
+  type: 'pickup' | 'delivery' | 'shipping';
+}
+
+export interface SubVariant {
+  value: string;
+  quantity: number;
+  price: string;
+  compareAtPrice: string;
+  costPrice: string;
+  shippingOptions: ShippingOption[];
+  image: string;
+}
+
+export interface MainProductVariant {
+  optionName: 'colors' | 'materials' | 'size' | 'style';
+  options: SubVariant[];
+}
+
+export interface Option {
+  optionName: string;
+  value: string;
+  image: string;
+  variants: MainProductVariant[];
+}
+
+export interface ProductVariant {
+  totalStockQuantity: number;
+  options: Option[];
+}
+
+export interface SelectedVariant {
+  optionName: string;
+  value: string;
+  subVariant: SubVariant;
+}

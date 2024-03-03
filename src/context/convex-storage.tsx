@@ -95,8 +95,11 @@ export const ConvexStorageContextProvider = ({ children }: Props) => {
     if (files && user) {
       for (let i = 0; i <= files.length; i++) {
         const file = files[i];
+        console.log('raw-file: ', file);
         console.log('file: ', fileMimeTypeSetter(file));
-        const storageId: Id<'_storage'> = await fileUpload(fileMimeTypeSetter(file));
+        const storageId: Id<'_storage'> = await fileUpload(
+          fileMimeTypeSetter(file)
+        );
         console.log('storageId: ', storageId);
         const userId = user?._id as Id<'users'>;
         console.log('userId: ', userId);

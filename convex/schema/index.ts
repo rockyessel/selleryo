@@ -105,6 +105,7 @@ export const ShopRolesSchema = {
 export const UserSchema = {
   name: v.string(),
   username: v.string(),
+  customerId: v.optional(v.string()),
   email: v.string(),
   password: v.optional(v.string()),
   image: v.optional(v.string()),

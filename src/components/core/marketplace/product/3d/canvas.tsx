@@ -24,8 +24,8 @@ const MarketPlaceCanvasComponent = () => {
         </div>
       </DialogTrigger>
       <DialogContent className='max-w-full mt-10 h-full rounded-t-lg'>
-        <DialogHeader className='max-w-full p-3 flex flex-row items-center justify-center border-b h-5'>
-          <div>In 3D View</div>
+        <DialogHeader className='!w-full flex flex-row items-center justify-between border-b h-8'>
+          <p>In 3D View</p>
           <Button
             onClick={() => setDialogState(false)}
             className='p-2'
@@ -37,7 +37,7 @@ const MarketPlaceCanvasComponent = () => {
         <Canvas className='w-full h-full cursor-grab'>
           <MarketPlace3DRenderPortal />
           <ambientLight />
-          <boxGeometry args={[3.5, 3.5, 3.5]} />
+          {/* <boxGeometry args={[3.5, 3.5, 3.5]} /> */}
           <pointLight position={[10, 10, 10]} />
           <OrbitControls />
         </Canvas>

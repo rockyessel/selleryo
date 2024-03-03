@@ -41,7 +41,7 @@ const FixToolbar = () => {
   return (
     <div
       contentEditable={false}
-      className='w-full flex items-start justify-between px-1 py-1 rounded-t-xl md:flex-wrap divide-x'
+      className='sticky top-1 w-full flex items-start justify-between px-1 py-1 rounded-t-xl md:flex-wrap divide-x'
     >
       <DoActions />
       <HeadersActions />

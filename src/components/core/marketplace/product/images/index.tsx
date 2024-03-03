@@ -1,5 +1,6 @@
 import NextImage from '@/components/native/next-image';
 import React from 'react';
+import MarketPlaceCanvasComponent from '../3d/canvas';
 
 const MarketPlaceProductImages = () => {
   return (
@@ -85,13 +86,11 @@ const MarketPlaceProductImages = () => {
               </div>
             </div>
           </div>
-              </div>
-              
-              {/*  */}
+        </div>
+
+        {/*  */}
         <div className='flex gap-4 justify-between mt-4 text-sm leading-5 text-center whitespace-nowrap text-zinc-800 max-md:flex-wrap max-md:max-w-full'>
-          <div className='grow justify-center px-12 py-6 rounded-lg border border-solid border-zinc-500 max-md:px-5'>
-            See this item in 3D
-          </div>
+          <MarketPlaceCanvasComponent />
           <div className='grow justify-center px-11 py-5 rounded-lg border border-solid border-zinc-500 leading-[147%] max-md:px-5'>
             See it in your space
           </div>

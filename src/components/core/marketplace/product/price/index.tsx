@@ -263,6 +263,20 @@ const MarketPlacePriceBox = () => {
         Ready within 2 hours
         <span className='text-zinc-800'> for pickup inside the store</span>
       </div>
+      <div className='flex gap-4 justify-between mt-7 text-center max-md:flex-wrap max-md:max-w-full'>
+        <div className='flex gap-2.5 py-3.5 pr-11 pl-5 whitespace-nowrap bg-white rounded border border-solid border-zinc-500 text-zinc-800 max-md:pr-5'>
+          <div className='text-base leading-4'>Qty</div>
+          <div className='my-auto text-base font-bold leading-4'>1</div>
+          <img
+            loading='lazy'
+            src='https://cdn.builder.io/api/v1/image/assets/TEMP/cc04caa33e9a623bab5157e07c8088679dbe4fe4cdcefeb4d1e3cb2e66240624?'
+            className='self-start w-3.5 aspect-[0.88]'
+          />
+        </div>
+        <div className='grow justify-center items-center px-16 py-4 text-base font-bold leading-4 text-white bg-red-700 rounded border border-red-700 border-solid max-md:px-5 max-md:max-w-full'>
+          Add to cart
+        </div>
+      </div>
     </div>
   );
 };

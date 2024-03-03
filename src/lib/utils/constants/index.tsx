@@ -277,6 +277,7 @@ export const INVITATION_STATUS = {
   REJECTED: 'rejected',
 };
 
+
 export const marketStantardCateogries = [
   {
     category: 'Electronics',
@@ -426,6 +427,20 @@ export const marketStantardCateogries = [
     ],
   },
 ];
+
+
+export const mainCategoriesList = marketStantardCateogries.map(
+  (category) => category.category
+);
+
+export const subCategories = (mainCategory: string) => {
+  
+  const item = marketStantardCateogries.find((items) => items.category === mainCategory)!
+
+  return item.subcategories
+}
+
+
 
 export const mimeTypes = [
   'deb',
