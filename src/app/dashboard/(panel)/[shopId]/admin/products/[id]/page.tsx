@@ -19,10 +19,10 @@ const PanelProductPage = async ({ params }: Props) => {
 
   if (!product) return notFound();
 
-  console.log('shop: ', shopId);
-  console.log('id: ', id);
-  console.log('params: ', params);
-  console.log('productId: ', product);
+  // console.log('shop: ', shopId);
+  // console.log('id: ', id);
+  // console.log('params: ', params);
+  // console.log('productId: ', product);
   const user = await getServerUser();
 
   return (

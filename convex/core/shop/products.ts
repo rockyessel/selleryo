@@ -38,7 +38,7 @@ export const getAllMartketableProduct = query({
       .filter((q) => q.eq(q.field('displayOnMartket'), true))
       .collect();
 
-    console.log('products: ', products);
+    // console.log('products: ', products);
 
     const p = products.map(async (product) => {
       const shop = await ctx.db.get(product.shopId);

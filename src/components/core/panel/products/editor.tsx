@@ -480,7 +480,7 @@ const ProductEditor = ({ userId, exitinPproduct }: Props) => {
 
       <fieldset className='border rounded-lg p-2'>
         <div className='flex items-start'>
-          <fieldset className='w-full h-full p-1 inline-flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded-lg'>
+          <fieldset className='w-10 h-10 p-1 inline-flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded-lg'>
             <ImagePlus strokeWidth={0.5} />
           </fieldset>
 

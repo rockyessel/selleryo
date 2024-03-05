@@ -165,19 +165,20 @@ export interface ShippingOption {
 export interface SubVariant {
   value: string;
   quantity: number;
-  price: string;
-  compareAtPrice: string;
-  costPrice: string;
+  price: number;
+  compareAtPrice: number;
+  costPrice: number;
   shippingOptions: ShippingOption[];
   image: string;
 }
 
 export interface MainProductVariant {
-  optionName: 'colors' | 'materials' | 'size' | 'style';
+  optionName: string
   options: SubVariant[];
 }
 
 export interface Option {
+  id:string,
   optionName: string;
   value: string;
   image: string;
